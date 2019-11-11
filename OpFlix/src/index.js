@@ -7,10 +7,20 @@ import CadastroScreen from './pages/cadastro';
 import HomeScreen from './pages/home';
 import ContatoScreen from './pages/contato';
 import HistoriaScreen from './pages/historia';
+import LoadingScreen from './pages/loading';
+import SenhaScreen from './pages/senha';
 
 const AuthStack = createStackNavigator({
-    sing: { screen: LoginScreen }
-})
+    Login: { 
+        screen: LoginScreen 
+    }
+})  
+
+const Loading = createStackNavigator({
+    Loading: {
+        screen: LoadingScreen
+    }
+})  
 
 const MainNavigation = createBottomTabNavigator({
     Contato: {
@@ -42,10 +52,14 @@ export default createAppContainer(
     createSwitchNavigator(
         {
             MainNavigation,
-            AuthStack
+            AuthStack,
+            LoadingScreen,
+            CadastroScreen,
+            SenhaScreen,
+            Loading
         },
         {
-            initialRouteName: 'AuthStack'
+            initialRouteName: 'Loading'
         },
     ),
 );

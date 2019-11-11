@@ -3,19 +3,15 @@ import React, { Component } from 'react';
 import {
     Text,
     View,
-    Image
+    Image,
+    TouchableOpacity
 } from 'react-native';
 
-export default class Historia extends Component {
+export default class Senha extends Component {
 
-    static navigationOptions = {
-        tabBarIcon: () => (
-            <Image
-                style={{width: 35, height: 35, tintColor: '#DB0909'}}
-                source={require('../assets/img/profile.icon.png')}
-            />
-        ),
-    };
+    _voltar = () => {
+        this.props.navigation.navigate('AuthStack')
+    }
 
     render() {
         return (
@@ -24,9 +20,12 @@ export default class Historia extends Component {
                     style={{ height: 90, alignItems: 'center' }}
                     source={require('../assets/img/OpFlix.nome.png')}
                 />
-                <Text>Profile</Text>
-            </View>
+                <Text>Senha</Text>
 
+                <TouchableOpacity onPress={this._voltar}>
+                    <Text>Voltar</Text>
+                </TouchableOpacity>
+            </View>
         );
     }
 } 

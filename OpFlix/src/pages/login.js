@@ -34,7 +34,7 @@ export default class Login extends Component {
             .then(resposta => resposta.json())
             .then(data => this._irPraHome(data.token))
             .catch(erro => console.warn('Ta aqui Tiago -->' + erro))
-    };
+    }
 
     _irPraHome = async token => {
         if (token != null) {
@@ -42,9 +42,17 @@ export default class Login extends Component {
                 await AsyncStorage.setItem('@opflix:token', token);
                 this.props.navigation.navigate('MainNavigation');
             } catch (error) {
-                <Tex>Email ou senha incorreta. Tente novamente</Tex>
+                <Tex>Email ou senha incorreta. Tente novamente.</Tex>
             }
         }
+    }
+
+    _irParaCadastro = () => {
+        this.props.navigation.navigate('CadastroScreen')
+    }
+
+    _irParaSenha = () => {
+        this.props.navigation.navigate('SenhaScreen')
     }
 
     render() {
@@ -54,13 +62,14 @@ export default class Login extends Component {
                     style={{ height: 90, alignItems: 'center' }}
                     source={require('../assets/img/OpFlix.nome.png')}
                 />
+
                 <TextInput
-                    placeholder='email'
+                    placeholder='Email'
                     onChangeText={email => this.setState({ email })}
                     value={this.state.email}
                 />
                 <TextInput
-                    placeholder='senha'
+                    placeholder='Senha'
                     onChangeText={senha => this.setState({ senha })}
                     value={this.state.senha}
                 />
@@ -71,8 +80,13 @@ export default class Login extends Component {
                     <Text>Login</Text>
                 </TouchableOpacity>
 
-                <Text>Esqueceu sua senha?</Text>
-                <Text>Deseja-se cadastrar</Text>
+                <TouchableOpacity onPress={this._irParaCadastro}>
+                    <Text>Cadastrar</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity onPress={this._irParaSenha}>
+                    <Text>Esqueceu sua senha?</Text>
+                </TouchableOpacity>
 
             </View>
         );
