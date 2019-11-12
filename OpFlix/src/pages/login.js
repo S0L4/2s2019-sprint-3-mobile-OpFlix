@@ -18,7 +18,7 @@ export default class Login extends Component {
             senha: '123456'
         }
     }
-
+    
     _realizarLogin = async () => {
         await fetch('http://192.168.4.240:5000/api/usuarios/login', {
             method: 'POST',
@@ -70,6 +70,7 @@ export default class Login extends Component {
                 />
                 <TextInput
                     placeholder='Senha'
+                    textContentType='password'
                     onChangeText={senha => this.setState({ senha })}
                     value={this.state.senha}
                 />

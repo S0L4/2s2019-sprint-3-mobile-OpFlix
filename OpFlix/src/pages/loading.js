@@ -3,7 +3,8 @@ import React, { Component } from 'react';
 import {
     Text,
     View,
-    Image
+    Image,
+    ActivityIndicator
 } from 'react-native';
 
 export default class Loading extends Component {
@@ -53,10 +54,7 @@ export default class Loading extends Component {
                 {(this.state.loading === 1) ?
                     (
                         <View>
-                            <Image
-                                style={{ width: 200, height: 200}}
-                                source={require('../assets/img/loading.gif')}
-                            />
+                            <ActivityIndicator size="large" color="red"/>
                         </View>
                     )
                     :

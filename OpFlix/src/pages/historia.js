@@ -3,7 +3,8 @@ import React, { Component } from 'react';
 import {
     Text,
     View,
-    Image
+    Image,
+    StyleSheet
 } from 'react-native';
 
 export default class Historia extends Component {
@@ -19,14 +20,29 @@ export default class Historia extends Component {
 
     render() {
         return (
-            <View>
-                <Image
-                    style={{ height: 90, alignItems: 'center' }}
+            <View style={styles.view}>
+                <Image 
+                    style={{ height: 90, marginLeft: 105, marginTop: 30, marginBottom: 20}}
                     source={require('../assets/img/OpFlix.nome.png')}
                 />
-                <Text>Profile</Text>
-            </View>
 
+                <Text style={styles.titulo}>Profile</Text>
+            </View>
         );
     }
 } 
+
+const styles = StyleSheet.create({
+    view: {
+        backgroundColor: 'black',
+    },  
+    titulo: {
+        backgroundColor: '#DB0909',
+        textAlign: 'center',
+        color: 'white',
+        fontFamily: 'Open Sans',
+        fontSize: 18,
+        padding: 5
+    },
+
+})
