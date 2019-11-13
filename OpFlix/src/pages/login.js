@@ -6,15 +6,21 @@ import {
     TextInput,
     AsyncStorage,
     TouchableOpacity,
-    Image
+    Image,
+    StyleSheet
 } from 'react-native';
 
 export default class Login extends Component {
 
+    
+    static navigationOptions = {
+        header: null,        
+    };
+
     constructor() {
         super();
         this.state = {
-            email: 'erik@email.com',
+            email: 'cassiana@email.com',
             senha: '123456'
         }
     }
@@ -93,3 +99,7 @@ export default class Login extends Component {
         );
     }
 }
+
+const styles = StyleSheet.create({
+
+}) 

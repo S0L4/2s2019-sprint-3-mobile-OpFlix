@@ -6,7 +6,8 @@ import {
     Image,
     AsyncStorage,
     StyleSheet,
-    Picker
+    Picker,
+    ScrollView
 } from 'react-native';
 
 import { FlatList } from 'react-native-gesture-handler';
@@ -14,6 +15,7 @@ import { FlatList } from 'react-native-gesture-handler';
 export default class Home extends Component {
 
     static navigationOptions = {
+        header: null,        
         tabBarIcon: () => (
             <Image
                 style={{ width: 35, height: 35, tintColor: '#DB0909' }}
@@ -27,29 +29,33 @@ export default class Home extends Component {
         this.state = {
             lancamentos: [],
             categorias: [],
-            listaNova: [],
 
-            valorEscolhido: null,
+            valorEscolhido: 0,
+            token: null
         }
     }
 
     componentDidMount() {
         this._listarLancamentos();
+        this._setarToken();
         this._listarCategorias();
     }
 
-    _setarValor = (valor) => {
-        this.setState({ valorEscolhido: valor })
-        if (valor === 0) {
-            this.setState({ listaNova: [] })
+    _setarToken = async () => {
+        try {
+            const tokenStorage = await AsyncStorage.getItem('@opflix:token');
+            if (tokenStorage != null) {
+                this.setState({ token: tokenStorage })
+            }
+        } catch (error) {
+            console.warn('Token' + erro)
         }
-        this.setState({ listaNova: this.state.lancamentos.filter(x => x.idCategoria == valor) })
     }
 
     _listarLancamentos = async () => {
         await fetch('http://192.168.4.240:5000/api/lancamentos', {
             headers: {
-                'Authorization': 'Bearer' + await AsyncStorage.getItem('@opflix:token'),
+                'Authorization': 'Bearer ' + this.state.token,
                 'Content-Type': 'application/json',
             }
         })
@@ -59,13 +65,16 @@ export default class Home extends Component {
     }
 
     _listarCategorias = async () => {
+        const tokenStorage = await AsyncStorage.getItem('@opflix:token');
         await fetch('http://192.168.4.240:5000/api/categorias', {
             headers: {
-                'Authorization': 'Bearer' + await AsyncStorage.getItem('@opflix:token'),
+                'Accept': 'application/json',
+                'Authorization': 'Bearer ' + tokenStorage,
                 'Content-Type': 'application/json',
             }
         })
             .then(resposta => resposta.json())
+            // .then(data => console.warn(data))
             .then(data => this.setState({ categorias: data }))
             .catch(erro => console.warn('Ta aqui Tiago -->' + erro))
     }
@@ -73,61 +82,68 @@ export default class Home extends Component {
     render() {
         return (
             <View style={styles.view}>
-                <Image
-                    style={{ height: 90, marginLeft: 105, marginTop: 30, marginBottom: 20 }}
-                    source={require('../assets/img/OpFlix.nome.png')}
-                />
+                <ScrollView>
+                    <Image
+                        style={{ height: 90, marginLeft: 105, marginTop: 30, marginBottom: 20 }}
+                        source={require('../assets/img/OpFlix.nome.png')}
+                    />
 
-                <Text style={styles.titulo}>Lançamentos</Text>
+                    <Text style={styles.titulo}>Lançamentos</Text>
 
-                <View>
-                    <Picker selectedValue={this.state.valorEscolhido} onValueChange={this._setarValor}>
-                        <Picker.Item label='Selecione um gênero' value='0' />
-                        {this.state.categorias.map(element => {
-                            return (    
-                                <Piker.Item label={element.nome} value={item.idCategoria} />
-                            )
-                        })}
-                    </Picker>
+                    <View>
+                        <Picker selectedValue={this.state.valorEscolhido} onValueChange={this._setarValor}>
+                            <Picker.Item label='Selecione um gênero' value='0' />
+                            {this.state.categorias.map(element => {
+                                return (
+                                    <Picker.Item label={element.nome} value={element.idCategoria} />
+                                )
+                            })}
+                        </Picker>
 
-                    <Text>{this.state.valorEscolhido}</Text>
-                </View>
+                        <Text>{this.state.valorEscolhido}</Text>
 
-                {this.state.listaNova.lenght > 0 ? <FlatList style={styles.listaLanc}
-                    data={this.state.listaNova}
-                    keyExtractor={item => item.idLancamento}
-                    renderItem={({ item }) => (
-                        <View style={styles.filme}>
-                            <Image
-                                style={{ width: '100%', height: 600, alignSelf: "center" }}
-                                source={{ uri: item.imagem }}
+                    </View>
+
+                    {this.state.valorEscolhido == 0 ?
+                        (
+
+                            <FlatList style={styles.listaLanc}
+                                data={this.state.lancamentos}
+                                keyExtractor={item => item.idLancamento}
+                                renderItem={({ item }) => (
+                                    <View style={styles.filme}>
+                                        <Image
+                                            style={{ width: '100%', height: 600, alignSelf: "center" }}
+                                            source={{ uri: item.imagem }}
+                                        />
+                                        <Text>{item.titulo}</Text>
+
+                                    </View>
+                                )}
                             />
-                            <Text>{item.titulo}</Text>
-                            <Text>{item.sinopse}</Text>
-                            <Text>{item.idCategoriaNavigation.nome}</Text>
-                            <Text>{item.duracaoMin}min</Text>
-                        </View>
-                    )}
-                
-                /> :
-                    
-                    <FlatList style={styles.listaLanc}
-                    data={this.state.lancamentos}
-                    keyExtractor={item => item.idLancamento}
-                    renderItem={({ item }) => (
-                        <View style={styles.filme}>
-                            <Image
-                                style={{ width: '100%', height: 600, alignSelf: "center" }}
-                                source={{ uri: item.imagem }}
-                            />
-                            <Text>{item.titulo}</Text>
-                            <Text>{item.sinopse}</Text>
-                            <Text>{item.idCategoriaNavigation.nome}</Text>
-                            <Text>{item.duracaoMin}min</Text>
-                        </View>
-                    )}
-                />}
 
+                        )
+                        :
+                        (
+
+                            <FlatList style={styles.listaLanc}
+                                data={this.state.lancamentos.filter(x => x.idCategoria == this.state.valorEscolhido)}
+                                keyExtractor={item => item.idLancamento}
+                                renderItem={({ item }) => (
+                                    <View style={styles.filme}>
+                                        <Image
+                                            style={{ width: '100%', height: 600, alignSelf: "center" }}
+                                            source={{ uri: item.imagem }}
+                                        />
+                                        <Text>{item.titulo}</Text>
+                                    </View>
+                                )}
+                            />
+
+                        )
+                    }
+
+                </ScrollView>
             </View>
         );
     }

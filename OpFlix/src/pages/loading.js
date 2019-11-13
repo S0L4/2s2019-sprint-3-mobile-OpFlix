@@ -51,7 +51,8 @@ export default class Loading extends Component {
                     style={{ height: 90, alignItems: 'center' }}
                     source={require('../assets/img/OpFlix.nome.png')}
                 />
-                {(this.state.loading === 1) ?
+
+                {this.state.loading === 1 ?
                     (
                         <View>
                             <ActivityIndicator size="large" color="red"/>
@@ -60,7 +61,8 @@ export default class Loading extends Component {
                     :
                     (
                         <Text>Estamos com algum problema. Por favor tente mais tarde.</Text>
-                    )}
+                    )
+                } 
             </View>
         );
     }
