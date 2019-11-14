@@ -4,10 +4,15 @@ import {
     Text,
     View,
     Image,
-    ActivityIndicator
+    ActivityIndicator,
+    StyleSheet
 } from 'react-native';
 
 export default class Loading extends Component {
+
+    static navigationOptions = {
+        header: null,        
+    };
 
     constructor() {
         super();
@@ -46,9 +51,9 @@ export default class Loading extends Component {
 
     render() {
         return (
-            <View>
+            <View style={styles.tudo}>
                 <Image
-                    style={{ height: 90, alignItems: 'center' }}
+                    style={{ height: 90, marginLeft: 105, marginTop: 240, marginBottom: 20 }}
                     source={require('../assets/img/OpFlix.nome.png')}
                 />
 
@@ -60,10 +65,17 @@ export default class Loading extends Component {
                     )
                     :
                     (
-                        <Text>Estamos com algum problema. Por favor tente mais tarde.</Text>
+                        <Text style={styles.erro}>Estamos com algum problema. Por favor tente mais tarde.</Text>
                     )
                 } 
             </View>
         );
     }
 } 
+
+const styles = StyleSheet.create({
+    tudo: {
+        backgroundColor: '#191919',
+        height: '100%'
+    }
+}) 

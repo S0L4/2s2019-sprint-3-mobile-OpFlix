@@ -12,7 +12,6 @@ import {
 
 export default class Login extends Component {
 
-    
     static navigationOptions = {
         header: null,        
     };
@@ -63,9 +62,9 @@ export default class Login extends Component {
 
     render() {
         return (
-            <View>
-                <Image
-                    style={{ height: 90, alignItems: 'center' }}
+            <View style={styles.tudo}>
+                <Image 
+                    style={styles.nome}
                     source={require('../assets/img/OpFlix.nome.png')}
                 />
 
@@ -101,5 +100,15 @@ export default class Login extends Component {
 }
 
 const styles = StyleSheet.create({
-
+    tudo: {
+        backgroundColor: '#191919',
+        height: '100%'
+    },
+    nome: { 
+        height: 90, 
+        marginLeft: 105, 
+        marginTop: 30, 
+        marginBottom: 20,
+        backgroundColor: 'black',
+    },
 }) 

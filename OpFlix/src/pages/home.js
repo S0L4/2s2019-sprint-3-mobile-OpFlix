@@ -52,6 +52,10 @@ export default class Home extends Component {
         }
     }
 
+    _setarValor = (valor) => {
+        this.setState({ valorEscolhido: valor })
+    }
+
     _listarLancamentos = async () => {
         await fetch('http://192.168.4.240:5000/api/lancamentos', {
             headers: {
@@ -81,7 +85,7 @@ export default class Home extends Component {
 
     render() {
         return (
-            <View style={styles.view}>
+            <View style={styles.tudo}>
                 <ScrollView>
                     <Image
                         style={{ height: 90, marginLeft: 105, marginTop: 30, marginBottom: 20 }}
@@ -92,15 +96,13 @@ export default class Home extends Component {
 
                     <View>
                         <Picker selectedValue={this.state.valorEscolhido} onValueChange={this._setarValor}>
-                            <Picker.Item label='Selecione um gênero' value='0' />
+                            <Picker.Item label='Selecione um gênero' value='0'/>
                             {this.state.categorias.map(element => {
                                 return (
-                                    <Picker.Item label={element.nome} value={element.idCategoria} />
+                                    <Picker.Item label={element.nome} value={element.idCategoria} style={styles.select}/>
                                 )
                             })}
                         </Picker>
-
-                        <Text>{this.state.valorEscolhido}</Text>
 
                     </View>
 
@@ -135,7 +137,7 @@ export default class Home extends Component {
                                             style={{ width: '100%', height: 600, alignSelf: "center" }}
                                             source={{ uri: item.imagem }}
                                         />
-                                        <Text>{item.titulo}</Text>
+                                        <Text style={styles.tituloFilme}>{item.titulo}</Text>
                                     </View>
                                 )}
                             />
@@ -150,9 +152,9 @@ export default class Home extends Component {
 }
 
 const styles = StyleSheet.create({
-    view: {
+    tudo: {
         backgroundColor: 'black',
-        height: '99%'
+        height: '100%'
     },
     listaLanc: {
         backgroundColor: '#191919'
@@ -161,10 +163,22 @@ const styles = StyleSheet.create({
         backgroundColor: '#DB0909',
         textAlign: 'center',
         color: 'white',
-        fontFamily: 'Open Sans',
         fontSize: 18,
         padding: 5
     },
     filme: {
+        marginBottom: 50,
+        padding: 30
+    },
+    tituloFilme: {        
+        backgroundColor: 'white',
+        fontSize: 14,
+        textAlign: 'center',
+        color: 'black',
+    },  
+    select: {
+        color: 'white',
+        fontSize: 14,
+        backgroundColor: '#720202'
     }
 })
