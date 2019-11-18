@@ -103,7 +103,6 @@ export default class Home extends Component {
                                 )
                             })}
                         </Picker>
-
                     </View>
 
                     {this.state.valorEscolhido == 0 ?
@@ -141,7 +140,7 @@ export default class Home extends Component {
                                     </View>
                                 )}
                             />
-
+                            
                         )
                     }
 

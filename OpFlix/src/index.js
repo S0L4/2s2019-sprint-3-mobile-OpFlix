@@ -53,7 +53,6 @@ export default createAppContainer(
         {
             MainNavigation,
             AuthStack,
-            LoadingScreen,
             CadastroScreen,
             SenhaScreen,
             Loading
