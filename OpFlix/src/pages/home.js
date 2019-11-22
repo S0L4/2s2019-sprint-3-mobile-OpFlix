@@ -95,7 +95,7 @@ export default class Home extends Component {
                     <Text style={styles.titulo}>Lançamentos</Text>
 
                     <View>
-                        <Picker selectedValue={this.state.valorEscolhido} onValueChange={this._setarValor}>
+                        <Picker style={styles.filtro} selectedValue={this.state.valorEscolhido} onValueChange={this._setarValor}>
                             <Picker.Item label='Selecione um gênero' value='0'/>
                             {this.state.categorias.map(element => {
                                 return (
@@ -104,7 +104,8 @@ export default class Home extends Component {
                             })}
                         </Picker>
                     </View>
-
+                    
+                    <View style={{borderBottomWidth: 0.5,borderBottomColor: '#DB0909'}}></View>
                     {this.state.valorEscolhido == 0 ?
                         (
 
@@ -117,7 +118,7 @@ export default class Home extends Component {
                                             style={{ width: '100%', height: 600, alignSelf: "center" }}
                                             source={{ uri: item.imagem }}
                                         />
-                                        <Text>{item.titulo}</Text>
+                                        <Text style={styles.tituloFilme}>{item.titulo}</Text>
 
                                     </View>
                                 )}
@@ -162,22 +163,25 @@ const styles = StyleSheet.create({
         backgroundColor: '#DB0909',
         textAlign: 'center',
         color: 'white',
-        fontSize: 18,
-        padding: 5
+        fontSize: 22,
+        padding: 10
     },
     filme: {
-        marginBottom: 50,
+        marginBottom: 5,
         padding: 30
     },
     tituloFilme: {        
-        backgroundColor: 'white',
-        fontSize: 14,
+        backgroundColor: 'black',
+        fontSize: 16,
         textAlign: 'center',
-        color: 'black',
+        color: 'white',
+        padding: 10,
+        paddingTop: 20,
+        paddingBottom: 20,
     },  
-    select: {
+    filtro: {
         color: 'white',
         fontSize: 14,
-        backgroundColor: '#720202'
+        backgroundColor: '#191919',
     }
 })

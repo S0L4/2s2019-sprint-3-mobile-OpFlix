@@ -5,7 +5,10 @@ import {
     View,
     Image,
     TouchableOpacity,
-    TextInput
+    TextInput,
+    StyleSheet,
+    ImageBackground
+
 } from 'react-native';
 
 export default class Cadastro extends Component {
@@ -52,36 +55,104 @@ export default class Cadastro extends Component {
 
     render() {
         return (
-            <View>
+            <View style={styles.tudo}>
                 <Image
-                    style={{ height: 90, marginLeft: 105, marginTop: 30, marginBottom: 20 }}
+                    style={styles.nome}
                     source={require('../assets/img/OpFlix.nome.png')}
                 />
 
-                <TextInput
-                    placeholder='Nome'
-                    onChangeText={nome => this.setState({ nome })}
-                    value={this.state.nome}
-                />
-                <TextInput
-                    placeholder='Email'
-                    onChangeText={email => this.setState({ email })}
-                    value={this.state.email}
-                />
-                <TextInput
-                    placeholder='Senha'
-                    onChangeText={senha => this.setState({ senha })}
-                    value={this.state.senha}
-                />
+                <ImageBackground
+                    style={{ width: '100%', height: '100%' }}
+                    source={require('../assets/img/OpFlix.background.jpg')}
+                    blurRadius={1}
+                >
 
-                <TouchableOpacity onPress={this._realizarCadastro}>
-                    <Text>Cadastrar</Text>
-                </TouchableOpacity>
+                    <View style={styles.form}>
+                        <TextInput
+                            style={styles.input}
+                            placeholder='Nome'
+                            placeholderTextColor='white'
+                            onChangeText={nome => this.setState({ nome })}
+                            value={this.state.nome}
+                        />
+                        <TextInput
+                            style={styles.input}
+                            placeholder='Email'
+                            placeholderTextColor='white'
+                            onChangeText={email => this.setState({ email })}
+                            value={this.state.email}
+                        />
+                        <TextInput
+                            style={styles.input}
+                            placeholder='Senha'
+                            placeholderTextColor='white'
+                            onChangeText={senha => this.setState({ senha })}
+                            value={this.state.senha}
+                        />
+                    </View>
 
-                <TouchableOpacity onPress={this._voltar}>
-                    <Text>Voltar</Text>
-                </TouchableOpacity>
+                    <TouchableOpacity onPress={this._realizarCadastro} style={styles.botao}>
+                        <Text style={styles.login}>Cadastrar</Text>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity onPress={this._voltar} style={styles.botao2}>
+                        <Text style={styles.texto}>Voltar</Text>
+                    </TouchableOpacity>
+
+                </ImageBackground>
             </View>
         );
     }
-} 
+}
+
+const styles = StyleSheet.create({
+    tudo: {
+        backgroundColor: '#191919',
+        height: '100%'
+    },
+    nome: {
+        height: 90,
+        marginLeft: 105,
+        marginTop: 30,
+        marginBottom: 20,
+    },
+    form: {
+        marginLeft: 30,
+        marginTop: 60,
+    },
+    input: {
+        width: 350,
+        padding: 5,
+        fontFamily: 'Open Sans',
+        fontSize: 25,
+        borderBottomWidth: 1,
+        color: 'white',
+        borderColor: 'white',
+        marginTop: 30
+    },
+    botao2: {
+        marginLeft: 105,
+        marginTop: 35,
+        borderRadius: 20,
+        width: 200,
+        padding: 10,
+        backgroundColor:'rgba(0,0,0,0.5)'
+    },
+    botao: {
+        marginLeft: 30,
+        marginTop: 70,
+        backgroundColor: '#DB0909',
+        width: 350,
+        padding: 10,
+    },
+    login: {
+        fontSize: 25,
+        color: 'white',
+        textAlign: 'center'
+    },
+    texto: {
+        color: 'white',
+        fontSize: 20,
+        textAlign: 'center'
+    }
+})
