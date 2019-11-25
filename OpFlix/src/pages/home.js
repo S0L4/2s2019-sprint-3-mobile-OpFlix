@@ -15,7 +15,7 @@ import { FlatList } from 'react-native-gesture-handler';
 export default class Home extends Component {
 
     static navigationOptions = {
-        header: null,        
+        header: null,
         tabBarIcon: () => (
             <Image
                 style={{ width: 35, height: 35, tintColor: '#DB0909' }}
@@ -29,37 +29,53 @@ export default class Home extends Component {
         this.state = {
             lancamentos: [],
             categorias: [],
+            plataformas: [],
+            tiposLanc: [],
 
-            valorEscolhido: 0,
-            token: null
+            listaFiltrada: [],
+
+            valorGenero: 0,
+            valorPlataforma: 0,
         }
     }
 
     componentDidMount() {
         this._listarLancamentos();
-        this._setarToken();
         this._listarCategorias();
+        this._listarPlataformas();
+        this._listarTiposLanc();
     }
 
-    _setarToken = async () => {
-        try {
-            const tokenStorage = await AsyncStorage.getItem('@opflix:token');
-            if (tokenStorage != null) {
-                this.setState({ token: tokenStorage })
-            }
-        } catch (error) {
-            console.warn('Token' + erro)
+    _setarValorGenero = (valor) => {
+        this.setState({ valorGenero: valor })
+
+        if (this.state.valorGenero == 0 && this.state.valorPlataforma != 0) {
+            this.setState({ listaFiltrada: this.state.lancamentos.filter(x => x.idCategoria == valor ) }) 
+        } else if (this.state.valorPlataforma != 0) {
+            this.setState({ listaFiltrada: this.state.lancamentos.filter(x => x.idCategoria == valor && x.idPlataforma == this.state.valorPlataforma) })
+        } else {
+            this.setState({ listaFiltrada: this.state.lancamentos.filter(x => x.idCategoria == valor) })
+        }
+
+    }
+
+    _setarValorPlataforma = (valor) => {
+        this.setState({ valorPlataforma: valor })
+
+        if (this.state.valorPlataforma == 0 && this.state.valorGenero != 0) {
+            this.setState({ listaFiltrada: this.state.lancamentos.filter(x => x.idPlataforma == valor ) })
+        } else if (this.state.valorGenero != 0) {
+            this.setState({ listaFiltrada: this.state.lancamentos.filter(x => x.idPlataforma == valor && x.idCategoria == this.state.valorGenero) })
+        } else {
+            this.setState({ listaFiltrada: this.state.lancamentos.filter(x => x.idPlataforma == valor) })
         }
     }
 
-    _setarValor = (valor) => {
-        this.setState({ valorEscolhido: valor })
-    }
-
     _listarLancamentos = async () => {
+        const tokenStorage = await AsyncStorage.getItem('@opflix:token');
         await fetch('http://192.168.4.240:5000/api/lancamentos', {
             headers: {
-                'Authorization': 'Bearer ' + this.state.token,
+                'Authorization': 'Bearer ' + tokenStorage,
                 'Content-Type': 'application/json',
             }
         })
@@ -78,8 +94,35 @@ export default class Home extends Component {
             }
         })
             .then(resposta => resposta.json())
-            // .then(data => console.warn(data))
             .then(data => this.setState({ categorias: data }))
+            .catch(erro => console.warn('Ta aqui Tiago -->' + erro))
+    }
+
+    _listarPlataformas = async () => {
+        const tokenStorage = await AsyncStorage.getItem('@opflix:token');
+        await fetch('http://192.168.4.240:5000/api/plataformas', {
+            headers: {
+                'Accept': 'application/json',
+                'Authorization': 'Bearer ' + tokenStorage,
+                'Content-Type': 'application/json',
+            }
+        })
+            .then(resposta => resposta.json())
+            .then(data => this.setState({ plataformas: data }))
+            .catch(erro => console.warn('Ta aqui Tiago -->' + erro))
+    }
+
+    _listarTiposLanc = async () => {
+        const tokenStorage = await AsyncStorage.getItem('@opflix:token');
+        await fetch('http://192.168.4.240:5000/tiposlancamento', {
+            headers: {
+                'Accept': 'application/json',
+                'Authorization': 'Bearer ' + tokenStorage,
+                'Content-Type': 'application/json',
+            }
+        })
+            .then(resposta => resposta.json())
+            .then(data => this.setState({ tiposLanc: data }))
             .catch(erro => console.warn('Ta aqui Tiago -->' + erro))
     }
 
@@ -95,20 +138,33 @@ export default class Home extends Component {
                     <Text style={styles.titulo}>Lançamentos</Text>
 
                     <View>
-                        <Picker style={styles.filtro} selectedValue={this.state.valorEscolhido} onValueChange={this._setarValor}>
-                            <Picker.Item label='Selecione um gênero' value='0'/>
+                        <Picker style={styles.filtro} selectedValue={this.state.valorGenero} onValueChange={this._setarValorGenero}>
+                            <Picker.Item label='Genêro' value='0' />
                             {this.state.categorias.map(element => {
                                 return (
-                                    <Picker.Item label={element.nome} value={element.idCategoria} style={styles.select}/>
+                                    <Picker.Item label={element.nome} value={element.idCategoria} style={styles.select} />
                                 )
                             })}
                         </Picker>
                     </View>
-                    
-                    <View style={{borderBottomWidth: 0.5,borderBottomColor: '#DB0909'}}></View>
-                    {this.state.valorEscolhido == 0 ?
-                        (
 
+                    <View>
+                        <Picker style={styles.filtro} selectedValue={this.state.valorPlataforma} onValueChange={this._setarValorPlataforma}>
+                            <Picker.Item label='Plataforma' value='0' />
+                            {this.state.plataformas.map(element => {
+                                return (
+                                    <Picker.Item label={element.nome} value={element.idPlataforma} style={styles.select} />
+                                )
+                            })}
+                        </Picker>
+                    </View>
+
+                    <View style={{ borderBottomWidth: 0.5, borderBottomColor: '#DB0909' }}></View>
+
+
+
+                    {this.state.valorGenero == 0 && this.state.valorPlataforma == 0 ?
+                        (
                             <FlatList style={styles.listaLanc}
                                 data={this.state.lancamentos}
                                 keyExtractor={item => item.idLancamento}
@@ -123,13 +179,11 @@ export default class Home extends Component {
                                     </View>
                                 )}
                             />
-
                         )
                         :
                         (
-
                             <FlatList style={styles.listaLanc}
-                                data={this.state.lancamentos.filter(x => x.idCategoria == this.state.valorEscolhido)}
+                                data={this.state.listaFiltrada}
                                 keyExtractor={item => item.idLancamento}
                                 renderItem={({ item }) => (
                                     <View style={styles.filme}>
@@ -141,7 +195,6 @@ export default class Home extends Component {
                                     </View>
                                 )}
                             />
-                            
                         )
                     }
 
@@ -170,7 +223,7 @@ const styles = StyleSheet.create({
         marginBottom: 5,
         padding: 30
     },
-    tituloFilme: {        
+    tituloFilme: {
         backgroundColor: 'black',
         fontSize: 16,
         textAlign: 'center',
@@ -178,7 +231,7 @@ const styles = StyleSheet.create({
         padding: 10,
         paddingTop: 20,
         paddingBottom: 20,
-    },  
+    },
     filtro: {
         color: 'white',
         fontSize: 14,
