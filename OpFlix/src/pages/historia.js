@@ -56,29 +56,23 @@ export default class Historia extends Component {
     render() {
         return (
             <View style={styles.tudo}>
-                <Image
-                    style={{ height: 90, marginLeft: 105, marginTop: 30, marginBottom: 20 }}
-                    source={require('../assets/img/OpFlix.nome.png')}
-                />
-
-                <Text style={styles.titulo}>Profile</Text>
-
-                <View style={styles.imagem}>
-                    {/* Imagem do Fundo */}
+                <View style={styles.nome}>
                     <Image
-                        style={styles.imagemProfile}
-                        source={{ uri: this.state.usuarios.imagem }}
+                        style={{ height: 90, marginLeft: 105, marginTop: 30, marginBottom: 20 }}
+                        source={require('../assets/img/OpFlix.nome.png')}
                     />
                 </View>
 
+                <Text style={styles.titulo}>Profile</Text>
+
                 <View>
                     <View style={styles.info}>
-                        <Text>Nome: {this.state.usuarios.nome}</Text>
-                        <Text>Email: {this.state.usuarios.email}</Text>
+                        <Text style={styles.texto}>Nome - {this.state.usuarios.nome} </Text>
+                        <Text style={styles.texto}>Email - {this.state.usuarios.email} </Text>
                     </View>
 
-                    <TouchableOpacity onPress={this._deslogar}>
-                        <Text>Sair</Text>
+                    <TouchableOpacity onPress={this._deslogar} style={styles.botao}>
+                        <Text style={styles.deslogar}>Sair</Text>
                     </TouchableOpacity>
                 </View>
             </View>
@@ -88,20 +82,39 @@ export default class Historia extends Component {
 
 const styles = StyleSheet.create({
     tudo: {
-        backgroundColor: 'black',
+        backgroundColor: '#191919',
     },
     titulo: {
         backgroundColor: '#DB0909',
         textAlign: 'center',
         color: 'white',
         fontFamily: 'Open Sans',
-        fontSize: 18,
+        fontSize: 22,
         padding: 5
     },
-    imagemProfile: {
-        width: 150,
-        height: 150,
-        borderLeftWidth: 100,
-        borderColor: "red",
-    }
+    botao: {
+        marginLeft: 30,
+        marginTop: 80,
+        backgroundColor: '#DB0909',
+        width: 350,
+        padding: 10,
+    },
+    info: {
+        marginTop: 50,
+        backgroundColor: '#191919',
+    },
+    texto: {
+        color: 'white',
+        fontSize: 18,
+        textAlign: 'center',
+        padding: 10
+    },
+    deslogar: {
+        color: 'white',
+        fontSize: 20,
+        textAlign: 'center'
+    },
+    nome: {
+        backgroundColor: 'black',
+    },  
 })

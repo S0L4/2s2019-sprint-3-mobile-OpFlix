@@ -9,6 +9,7 @@ import ContatoScreen from './pages/contato';
 import HistoriaScreen from './pages/historia';
 import LoadingScreen from './pages/loading';
 import SenhaScreen from './pages/senha';
+import FilmeScreem from './pages/filme';
 
 const AuthStack = createStackNavigator({
     Login: { 
@@ -55,7 +56,7 @@ export default createAppContainer(
             AuthStack,
             CadastroScreen,
             SenhaScreen,
-            Loading
+            Loading,
         },
         {
             initialRouteName: 'Loading'   

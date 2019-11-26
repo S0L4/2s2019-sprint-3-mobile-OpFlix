@@ -25,8 +25,8 @@ export default class Senha extends Component {
         return (
             <View>
                 <Image
-                        style={{ height: 90, marginLeft: 105, marginTop: 30, marginBottom: 20 }}
-                        source={require('../assets/img/OpFlix.nome.png')}
+                    style={{ height: 90, marginLeft: 105, marginTop: 30, marginBottom: 20 }}
+                    source={require('../assets/img/OpFlix.nome.png')}
                 />
                 <Text>Senha</Text>
 
